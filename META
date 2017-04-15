@@ -1,0 +1,2 @@
+version = "0.0.1"
+description = "extractPath: simply (and naively) extract path from SVG files"
