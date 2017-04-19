@@ -8,8 +8,8 @@ extractPath:
 scalePath:extractNumbers.ml scalePath.ml
 	ocamlfind ocamlopt $^ -o $@
 
-install: ${BINS}
-	cp $^ ${PREFIX}/bin/
+install:
+	cp  ${BINS} ${PREFIX}/bin/
 
 uninstall:
 	rm -f ${PREFIX}/bin/extractPath
