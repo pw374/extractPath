@@ -9,3 +9,5 @@ uninstall:
 
 include Makefile.prefix
 
+clean:
+	rm -f *~ *.cmxa *.cm[ioxa]
