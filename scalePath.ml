@@ -24,8 +24,15 @@ let p = ExtractNumbers.f path
 
 let _ =
   let open ExtractNumbers in
+  let space = ref false in
   List.iter (function
-      | Char c -> print_char c
-      | Number n -> Printf.printf "%f " @@ scale *. n
+      | Char c ->
+        print_char c;
+        space := false
+      | Number n ->
+        if !space then
+          print_char ' ';
+        Printf.printf "%g" @@ scale *. n;
+        space := true
     )
     p
