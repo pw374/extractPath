@@ -28,22 +28,22 @@ let f s =
     match String.get s i with
     | '+' when first_call ->
       assert (is_digit @@ String.get s (i+1));
-      read_next_token (succ i)
+      read_next_token ~point ~first_call ~accu (succ i)
     | '-' when first_call ->
       assert (is_digit @@ String.get s (i+1));
       begin
-        match read_next_token (succ i) with
+        match read_next_token ~point ~first_call ~accu (succ i) with
         | i, Number t -> i, Number(-. t)
         | _ -> assert false
       end
     | '0' .. '9' as c ->
-      read_next_token ~first_call:false ~accu:(accu ^ String.make 1 c) (succ i)
+      read_next_token ~point ~first_call:false ~accu:(accu ^ String.make 1 c) (succ i)
     | '.' as c when not point ->
       read_next_token
         ~point:true
         ~first_call:false ~accu:(accu ^ String.make 1 c) (succ i)
     | _ when not first_call ->
-      succ i, Number (float_of_string accu)
+      i, Number (float_of_string accu)
     | c ->
       assert (accu="");
       succ i, Char c
@@ -61,3 +61,5 @@ let f s =
 
 
 (* let _ = f "m 0.39129543.39128343 0 100.92575657 70.73940557 0 0 328.50186 133.898819 0 0 -55.41005 70.73942 0 0 57.38917 108.63575 0 0 57.38911 -136.42549 0 0 93.00928 -214.744856 0 0 47.49349 538.123756 0 0 61.34739 85.89759 0 0 -61.34739 156.63874 0 0 -47.49349 -156.63874 0 0 -425.46932 101.05752 0 0 -61.347407 -101.05752 0 0 " *)
+
+(* let _ = f "M15.579,44.37C10.472,39.206,5.217,33.894,0,28.618c1.127-1.114,2.399-2.369,3.802-3.755 c3.832,3.901,7.76,7.899,11.804,12.016C25.916,26.521,36.07,16.318,46.202,6.138C47.648,7.586,48.884,8.823,50,9.94 C38.551,21.392,27.052,32.894,15.579,44.37z" *)
