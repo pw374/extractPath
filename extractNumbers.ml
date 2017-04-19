@@ -24,26 +24,34 @@ let f s =
   let is_digit = function
     | '0' .. '9' -> true
     | _ -> false in
+  let has_exp s =
+    let l = String.length s in
+    l > 0 && (match String.get s (l-1) with 'e'|'E' -> true | _-> false)
+  in
   let rec read_next_token ?(point=false) ?(first_call=true) ?(accu="") i : int * token =
     match String.get s i with
-    | '+' when first_call ->
+    | '+' when first_call || has_exp accu ->
       assert (is_digit @@ String.get s (i+1));
       read_next_token ~point ~first_call ~accu (succ i)
-    | '-' when first_call ->
+    | '-' as c when first_call || has_exp accu ->
       assert (is_digit @@ String.get s (i+1));
-      begin
-        match read_next_token ~point ~first_call ~accu (succ i) with
-        | i, Number t -> i, Number(-. t)
-        | _ -> assert false
-      end
+      read_next_token ~point ~first_call:false ~accu:(accu ^ String.make 1 c) (succ i)
     | '0' .. '9' as c ->
       read_next_token ~point ~first_call:false ~accu:(accu ^ String.make 1 c) (succ i)
     | '.' as c when not point ->
       read_next_token
         ~point:true
         ~first_call:false ~accu:(accu ^ String.make 1 c) (succ i)
+    | 'e' | 'E' as c ->
+      (* exponent *)
+      assert(not first_call
+             && not (String.contains accu 'e'||String.contains accu 'E'));
+      read_next_token ~point ~first_call:false ~accu:(accu ^ String.make 1 c) (succ i)
     | _ when not first_call ->
-      i, Number (float_of_string accu)
+      begin try
+          i, Number (float_of_string accu)
+        with e -> prerr_endline ("can't read " ^ accu); raise e
+      end
     | c ->
       assert (accu="");
       succ i, Char c
