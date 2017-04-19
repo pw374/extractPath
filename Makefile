@@ -3,10 +3,10 @@ BINS := extractPath scalePath
 all: ${BINS}
 
 extractPath:
-	ocamlfind ocamlopt -package xmlm xmlm.cmxa extractPath.ml -o extractPath
+	ocamlfind ocamlopt -package xmlm xmlm.cmxa $< -o $@
 
-scalePath:
-	ocamlfind ocamlopt extractNumbers.ml scalePath.ml -o scalePath
+scalePath:extractNumbers.ml scalePath.ml
+	ocamlfind ocamlopt $^ -o $@
 
 install: ${BINS}
 	cp $^ ${PREFIX}/bin/
