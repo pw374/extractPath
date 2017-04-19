@@ -1,3 +1,4 @@
+version: "0.1"
 maintainer: "philippe.wang@gmail.com"
 name: "extractPath"
 opam-version: "1.2"
