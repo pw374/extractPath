@@ -9,6 +9,7 @@ scalePath:extractNumbers.ml scalePath.ml
 	ocamlfind ocamlopt $^ -o $@
 
 install:
+	make all
 	cp  ${BINS} ${PREFIX}/bin/
 
 uninstall:
@@ -19,3 +20,5 @@ include Makefile.prefix
 
 clean:
 	rm -f *~ *.cmxa *.cm[ioxa]
+
+.PHONY: install uninstall clean
