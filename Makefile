@@ -2,7 +2,7 @@ BINS := extractPath scalePath
 
 all: ${BINS}
 
-extractPath:
+extractPath:extractPath.ml
 	ocamlfind ocamlopt -package xmlm xmlm.cmxa $< -o $@
 
 scalePath:extractNumbers.ml scalePath.ml
